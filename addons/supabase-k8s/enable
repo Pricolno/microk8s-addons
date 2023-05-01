@@ -16,11 +16,11 @@ def main():
 
     # Need enable helm3 and dns
     subprocess.check_call([
-        MICROK8S_ENABLE, "helm3"
+        "sudo", MICROK8S_ENABLE, "helm3"
     ])
 
     subprocess.check_call([
-        MICROK8S_ENABLE, "dns"
+        "sudo", MICROK8S_ENABLE, "dns"
     ])
 
     
