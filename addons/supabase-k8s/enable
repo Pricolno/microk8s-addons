@@ -10,19 +10,32 @@ KUBECTL = '/snap/bin/microk8s.kubectl'
 HELM = '/snap/bin/microk8s.helm3'
 AD_NAME = 'supabase-k8s'
 
+ARGS_PATH = f'/var/snap/microk8s/current/args/{AD_NAME}'
+
+
 @click.command()
 def main():
     click.echo(f'Enabling {AD_NAME}')
 
-    # Need enable helm3 and dns
-    subprocess.check_call([
-        "sudo", MICROK8S_ENABLE, "helm3"
-    ])
+    # # Need enable helm3 and dns
+    # subprocess.check_call([
+    #     "sudo", MICROK8S_ENABLE, "helm3"
+    # ])
+
+    # subprocess.check_call([
+    #     "sudo", MICROK8S_ENABLE, "dns"
+    # ])
+
 
     subprocess.check_call([
-        "sudo", MICROK8S_ENABLE, "dns"
+        'mkdir', '-p', ARGS_PATH
     ])
 
+
+    subprocess.check_call([
+        "cd", ARGS_PATH
+    ])
+    
     
     # Clone Repository
     subprocess.check_call([
