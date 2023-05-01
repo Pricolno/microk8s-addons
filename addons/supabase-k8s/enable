@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+# addons/supabase/enable
+
+import subprocess
+import click
+
+MICROK8S_ENABLE = '/snap/bin/microk8s.enable'
+MICROK8S_DISABLE = '/snap/bin/microk8s.disable'
+KUBECTL = '/snap/bin/microk8s.kubectl'
+HELM = '/snap/bin/microk8s.helm3'
+AD_NAME = 'supabase-k8s'
+
+@click.command()
+def main():
+    click.echo(f'Enabling {AD_NAME}')
+
+    # Need enable helm3 and dns
+    subprocess.check_call([
+        MICROK8S_ENABLE, "helm3"
+    ])
+
+    subprocess.check_call([
+        MICROK8S_ENABLE, "dns"
+    ])
+
+    
+    # Clone Repository
+    subprocess.check_call([
+        "git", "clone", "https://github.com/supabase-community/supabase-kubernetes"
+    ])
+
+    # Switch to charts directory
+    subprocess.check_call([
+        "cd", "supabase-kubernetes/charts/supabase/"
+    ])
+
+    # Create JWT secret
+    subprocess.check_call([
+        KUBECTL, "-n", "default", "create", "secret", "generic", "demo-supabase-jwt", 
+        "--from-literal=anonKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjc1NDAwNDAwLAogICAgImV4cCI6IDE4MzMxNjY4MDAKfQ.ztuiBzjaVoFHmoljUXWmnuDN6QU2WgJICeqwyzyZO88'",
+        "--from-literal=serviceKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAic2VydmljZV9yb2xlIiwKICAgICJpc3MiOiAic3VwYWJhc2UiLAogICAgImlhdCI6IDE2NzU0MDA0MDAsCiAgICAiZXhwIjogMTgzMzE2NjgwMAp9.qNsmXzz4tG7eqJPh1Y58DbtIlJBauwpqx39UF-MwM8k'",
+        "--from-literal=secret='abcdefghijklmnopqrstuvwxyz123456'"
+    ])
+
+    # Create SMTP secret
+    subprocess.check_call([
+        KUBECTL, "-n", "default", "create", "secret", "generic", "demo-supabase-smtp", 
+        "--from-literal=username='your-mail@example.com'",
+        "--from-literal=password='example123456'"
+    ])
+
+    # Create DB secret
+    subprocess.check_call([
+        KUBECTL, "-n", "default", "create", "secret", "generic", "demo-supabase-db", 
+        "--from-literal=username='postgres'",
+        "--from-literal=password='example123456'"
+    ])
+
+
+    # Install the chart
+    subprocess.check_call([
+        HELM, "-n", "default", "install", "demo", "-f", "values.example.yaml", "."
+    ])
+    
+
+    subprocess.check_call([
+        KUBECTL, "port-forward", "--namespace", "default", "svc/demo-supabase-studio", "3000:3000"
+    ])
+
+    click.echo('supabase-studio open on http://localhost:3000')
+
+    click.echo(f'Enabled {AD_NAME}')
+
+
+if __name__ == "__main__":
+
+    main()

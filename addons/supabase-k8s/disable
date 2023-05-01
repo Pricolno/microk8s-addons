@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+# addons/supabase/disable
+
+import subprocess
+import click
+
+MICROK8S_ENABLE = '/snap/bin/microk8s.enable'
+MICROK8S_DISABLE = '/snap/bin/microk8s.disable'
+KUBECTL = '/snap/bin/microk8s.kubectl'
+HELM = '/snap/bin/microk8s.helm3'
+AD_NAME = 'supabase-k8s'
+
+@click.command()
+def main():
+    click.echo(f'Disabling {AD_NAME}')
+
+    subprocess.check_call([
+        HELM, 'uninstall', 'demo',
+    ])
+
+    # # Need enable helm3 and dns
+    # subprocess.check_call([
+    #     MICROK8S_DISABLE, "helm3"
+    # ])
+
+    # subprocess.check_call([
+    #     MICROK8S_DISABLE, "dns"
+    # ])
+
+    
+    click.echo(f'Disabled {AD_NAME}')
+
+
+if __name__ == "__main__":
+
+    main()
