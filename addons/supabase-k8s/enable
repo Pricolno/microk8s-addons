@@ -10,6 +10,7 @@ KUBECTL = '/snap/bin/microk8s.kubectl'
 HELM = '/snap/bin/microk8s.helm3'
 AD_NAME = 'supabase-k8s'
 
+GIT = '/usr/bin/git'
 ARGS_PATH = f'/var/snap/microk8s/current/args/{AD_NAME}'
 
 
@@ -31,15 +32,19 @@ def main():
         'mkdir', '-p', ARGS_PATH
     ])
 
+    subprocess.check_call([
+        'rm', '-rf', f"{ARGS_PATH}/.git"
+    ])
+
 
     subprocess.check_call([
         "cd", ARGS_PATH
     ])
     
-    
+
     # Clone Repository
     subprocess.check_call([
-        "git", "clone", "https://github.com/supabase-community/supabase-kubernetes"
+        GIT, "clone", "https://github.com/supabase-community/supabase-kubernetes"
     ])
 
     # Switch to charts directory
