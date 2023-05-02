@@ -33,24 +33,25 @@ def main():
     ])
 
     subprocess.check_call([
-        'rm', '-rf', f"{ARGS_PATH}/.git"
+        'rm', '-rf',     f"{ARGS_PATH}/.git"
     ])
 
 
-    subprocess.check_call([
-        "cd", ARGS_PATH
-    ])
+    # subprocess.check_call([
+    #     "cd", ARGS_PATH
+    # ])
     
 
     # Clone Repository
     subprocess.check_call([
-        GIT, "clone", "https://github.com/supabase-community/supabase-kubernetes"
+        GIT, "clone", "https://github.com/supabase-community/supabase-kubernetes", 
+        ARGS_PATH
     ])
 
-    # Switch to charts directory
-    subprocess.check_call([
-        "cd", "supabase-kubernetes/charts/supabase/"
-    ])
+    # # Switch to charts directory
+    # subprocess.check_call([
+    #     "cd", f"{ARGS_PATH}/supabase-kubernetes/charts/supabase/"
+    # ])
 
     # Create JWT secret
     subprocess.check_call([
@@ -77,7 +78,9 @@ def main():
 
     # Install the chart
     subprocess.check_call([
-        HELM, "-n", "default", "install", "demo", "-f", "values.example.yaml", "."
+        HELM, "-n", "default", "install", "demo", "-f", "values.example.yaml", 
+        #"."
+        f"{ARGS_PATH}/supabase-kubernetes/charts/supabase/"
     ])
     
 
