@@ -33,7 +33,7 @@ def main():
     ])
 
     subprocess.check_call([
-        'rm', '-rf',     f"{ARGS_PATH}/.git"
+        'rm', '-rf',     f"{ARGS_PATH}/"
     ])
 
 
@@ -80,7 +80,7 @@ def main():
     subprocess.check_call([
         HELM, "-n", "default", "install", "demo", "-f", "values.example.yaml", 
         #"."
-        f"{ARGS_PATH}/supabase-kubernetes/charts/supabase/"
+        f"{ARGS_PATH}/charts/supabase/"
     ])
     
 
