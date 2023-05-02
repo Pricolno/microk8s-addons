@@ -28,14 +28,14 @@ def main():
     # ])
 
 
+
+    subprocess.check_call([
+        'sudo', 'rm', '-rf', f"{ARGS_PATH}/"
+    ])
+
     subprocess.check_call([
         'mkdir', '-p', ARGS_PATH
     ])
-
-    subprocess.check_call([
-        'rm', '-rf',     f"{ARGS_PATH}/"
-    ])
-
 
     # subprocess.check_call([
     #     "cd", ARGS_PATH
