@@ -4,14 +4,16 @@
 import subprocess
 import click
 
+AD_NAME = 'supabase-k8s'
+CHART_VERSION = '0.1.1'
+
 MICROK8S_ENABLE = '/snap/bin/microk8s.enable'
 MICROK8S_DISABLE = '/snap/bin/microk8s.disable'
 KUBECTL = '/snap/bin/microk8s.kubectl'
 HELM = '/snap/bin/microk8s.helm3'
-AD_NAME = 'supabase-k8s'
-
 GIT = '/usr/bin/git'
 ARGS_PATH = f'/var/snap/microk8s/current/args/{AD_NAME}'
+
 
 
 @click.command()
@@ -26,7 +28,6 @@ def main():
     # subprocess.check_call([
     #     "sudo", MICROK8S_ENABLE, "dns"
     # ])
-
 
 
     subprocess.check_call([
@@ -47,11 +48,6 @@ def main():
         GIT, "clone", "https://github.com/supabase-community/supabase-kubernetes", 
         ARGS_PATH
     ])
-
-    # # Switch to charts directory
-    # subprocess.check_call([
-    #     "cd", f"{ARGS_PATH}/supabase-kubernetes/charts/supabase/"
-    # ])
 
 
     # Create JWT secret
@@ -87,24 +83,30 @@ def main():
 
     # Install the chart
     subprocess.check_call([
-        HELM, "-n", "default", "install", "demo", "-f", f"{ARGS_PATH}/charts/supabase/values.example.yaml", 
+        HELM, "-n", "default", 
+        "install", "demo",
+        "-f", f"{ARGS_PATH}/charts/supabase/values.example.yaml", 
         #"."
-        f"{ARGS_PATH}/charts/supabase/"
+        f"{ARGS_PATH}/charts/supabase/",
+        "--version", CHART_VERSION
     ])
     
 
     click.echo("""1. Get the Supabase URL by running these commands:
 
-   kubectl port-forward --namespace default svc/demo-supabase-studio 3000:3000 &
-   echo "Supabase Studio URL: http://127.0.0.1:3000"
+   microk8s kubectl port-forward --namespace default svc/demo-supabase-studio 3000:3000 & echo "Supabase Studio URL: http://127.0.0.1:3000"
     """)
     
     # subprocess.check_call([
     #     KUBECTL, "port-forward", "--namespace", "default", "svc/demo-supabase-studio", "3000:3000"
     # ])
 
+    click.echo("""For uninstall supabase need use 
+    
+    microk8s helm3 uninstall demo
+    
+    """)
 
-    # click.echo('supabase-studio open on http://localhost:3000')
 
     click.echo(f'Enabled {AD_NAME}')
 
