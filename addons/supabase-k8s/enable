@@ -53,28 +53,37 @@ def main():
     #     "cd", f"{ARGS_PATH}/supabase-kubernetes/charts/supabase/"
     # ])
 
+
     # Create JWT secret
-    subprocess.check_call([
-        KUBECTL, "-n", "default", "create", "secret", "generic", "demo-supabase-jwt", 
-        "--from-literal=anonKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjc1NDAwNDAwLAogICAgImV4cCI6IDE4MzMxNjY4MDAKfQ.ztuiBzjaVoFHmoljUXWmnuDN6QU2WgJICeqwyzyZO88'",
-        "--from-literal=serviceKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAic2VydmljZV9yb2xlIiwKICAgICJpc3MiOiAic3VwYWJhc2UiLAogICAgImlhdCI6IDE2NzU0MDA0MDAsCiAgICAiZXhwIjogMTgzMzE2NjgwMAp9.qNsmXzz4tG7eqJPh1Y58DbtIlJBauwpqx39UF-MwM8k'",
-        "--from-literal=secret='abcdefghijklmnopqrstuvwxyz123456'"
-    ])
+    try:
+        subprocess.check_call([
+            KUBECTL, "-n", "default", "create", "secret", "generic", "demo-supabase-jwt", 
+            "--from-literal=anonKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjc1NDAwNDAwLAogICAgImV4cCI6IDE4MzMxNjY4MDAKfQ.ztuiBzjaVoFHmoljUXWmnuDN6QU2WgJICeqwyzyZO88'",
+            "--from-literal=serviceKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAic2VydmljZV9yb2xlIiwKICAgICJpc3MiOiAic3VwYWJhc2UiLAogICAgImlhdCI6IDE2NzU0MDA0MDAsCiAgICAiZXhwIjogMTgzMzE2NjgwMAp9.qNsmXzz4tG7eqJPh1Y58DbtIlJBauwpqx39UF-MwM8k'",
+            "--from-literal=secret='abcdefghijklmnopqrstuvwxyz123456'"
+        ])
+    except Exception as e:
+        click.echo(e)
 
     # Create SMTP secret
-    subprocess.check_call([
-        KUBECTL, "-n", "default", "create", "secret", "generic", "demo-supabase-smtp", 
-        "--from-literal=username='your-mail@example.com'",
-        "--from-literal=password='example123456'"
-    ])
+    try:
+        subprocess.check_call([
+            KUBECTL, "-n", "default", "create", "secret", "generic", "demo-supabase-smtp", 
+            "--from-literal=username='your-mail@example.com'",
+            "--from-literal=password='example123456'"
+        ])
+    except Exception as e:
+        click.echo(e)
 
     # Create DB secret
-    subprocess.check_call([
-        KUBECTL, "-n", "default", "create", "secret", "generic", "demo-supabase-db", 
-        "--from-literal=username='postgres'",
-        "--from-literal=password='example123456'"
-    ])
-
+    try:
+        subprocess.check_call([
+            KUBECTL, "-n", "default", "create", "secret", "generic", "demo-supabase-db", 
+            "--from-literal=username='postgres'",
+            "--from-literal=password='example123456'"
+        ])
+    except Exception as e:
+        click.echo(e)
 
     # Install the chart
     subprocess.check_call([

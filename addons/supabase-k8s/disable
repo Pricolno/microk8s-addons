@@ -14,6 +14,29 @@ AD_NAME = 'supabase-k8s'
 def main():
     click.echo(f'Disabling {AD_NAME}')
 
+    try:
+        subprocess.check_call([
+            KUBECTL, 'delete', 'secret', 'demo-supabase-jwt'
+        ])
+    except Exception as e:
+        click.echo(e)
+        
+    try:
+        subprocess.check_call([
+            KUBECTL, 'delete', 'secret', 'demo-supabase-smtp'
+        ])
+    except Exception as e:
+        click.echo(e)
+    
+
+    try:
+        subprocess.check_call([
+            KUBECTL, 'delete', 'secret', 'demo-supabase-db'
+        ])
+    except Exception as e:
+        click.echo(e)
+    
+
     subprocess.check_call([
         HELM, 'uninstall', 'demo',
     ])
