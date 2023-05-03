@@ -63,7 +63,7 @@ def main():
             "--from-literal=secret='abcdefghijklmnopqrstuvwxyz123456'"
         ])
     except Exception as e:
-        click.echo(e)
+        click.echo(f"\nSecret already exists: \n{e}\n")
 
     # Create SMTP secret
     try:
@@ -73,7 +73,7 @@ def main():
             "--from-literal=password='example123456'"
         ])
     except Exception as e:
-        click.echo(e)
+        click.echo(f"\nSecret already exists: \n{e}\n")
 
     # Create DB secret
     try:
@@ -83,7 +83,7 @@ def main():
             "--from-literal=password='example123456'"
         ])
     except Exception as e:
-        click.echo(e)
+        click.echo(f"\nSecret already exists: \n{e}\n")
 
     # Install the chart
     subprocess.check_call([

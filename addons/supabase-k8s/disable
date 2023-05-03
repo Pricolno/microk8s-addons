@@ -19,23 +19,22 @@ def main():
             KUBECTL, 'delete', 'secret', 'demo-supabase-jwt'
         ])
     except Exception as e:
-        click.echo(e)
+        click.echo(f"\nSecret does not exists: \n{e}\n")
         
     try:
         subprocess.check_call([
             KUBECTL, 'delete', 'secret', 'demo-supabase-smtp'
         ])
     except Exception as e:
-        click.echo(e)
+        click.echo(f"\nSecret does not exists: \n{e}\n")
     
-
     try:
         subprocess.check_call([
             KUBECTL, 'delete', 'secret', 'demo-supabase-db'
         ])
     except Exception as e:
-        click.echo(e)
-    
+        click.echo(f"\nSecret does not exists: \n{e}\n")
+
 
     subprocess.check_call([
         HELM, 'uninstall', 'demo',
