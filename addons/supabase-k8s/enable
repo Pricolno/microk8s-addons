@@ -93,11 +93,18 @@ def main():
     ])
     
 
-    subprocess.check_call([
-        KUBECTL, "port-forward", "--namespace", "default", "svc/demo-supabase-studio", "3000:3000"
-    ])
+    click.echo("""1. Get the Supabase URL by running these commands:
 
-    click.echo('supabase-studio open on http://localhost:3000')
+   kubectl port-forward --namespace default svc/demo-supabase-studio 3000:3000 &
+   echo "Supabase Studio URL: http://127.0.0.1:3000"
+    """)
+    
+    # subprocess.check_call([
+    #     KUBECTL, "port-forward", "--namespace", "default", "svc/demo-supabase-studio", "3000:3000"
+    # ])
+
+
+    # click.echo('supabase-studio open on http://localhost:3000')
 
     click.echo(f'Enabled {AD_NAME}')
 
